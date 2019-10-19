@@ -98,7 +98,13 @@ const geocode2 = function (Lat, Lon, Cd,callback)
 				StLL = 'Hay '+Lluvia+'% de posibilidad de lluvia.'
 				StringFinal = Ahorita+StT+StLL+'('+Cd+')'
 
-				callback(StringFinal)
+				var Final2 = {
+					Temperatura: StT,
+					Probabilidad_Lluvia: StLL,
+					String_Final: StringFinal
+				}
+
+				callback(Final2)
 			}
 		}
 		
@@ -118,9 +124,10 @@ geocode('Monterrey', function(Lat,Lon,Cd)
 */
 
 app.get('', function(req, res){
+	
 	res.send({
-		greeting: 'Hola Mundo',
-		P : req.query.search
+		greeting: 'Hola, bienvenid@ al laboratorio 6 de Ricardo Reyes A01281564',
+		busqueda: 'para buscar una ciudad poner en el link /weather?search=[Nombre ciudad]'
 	})
 
 
@@ -133,11 +140,10 @@ app.get('/weather', function(req,res){
 	if (!req.query.search )
 	{
 		res.send({
-		error: "debes enviar el nombre de una ciudad"
+		error: "debes enviar el nombre de una ciudad",
+		como : "poner en el link /weather?search=[Nombre ciudad]"
 		})
 	}
-	
-
 	
 	console.log(req.query.search)
 
@@ -146,12 +152,21 @@ app.get('/weather', function(req,res){
 		geocode2(Lat,Lon,Cd, function(Mensaje)
 		{
 
+			/*
+					Temperatura: StT
+					Probabilidad_Lluvia: StLL
+					String_Final: StringFinal
+			*/
+
 			res.send({
 			 Ciudad : req.query.search,
-			 Todo : Mensaje
+			 Temperatura: Mensaje.Temperatura,
+			 Probabilidad_Lluvia: Mensaje.Probabilidad_Lluvia,
+			 Todo : Mensaje.String_Final
 			})
-			console.log(Mensaje)
+			//console.log(Mensaje)
 		})
+
 
 	})
 	
@@ -162,6 +177,13 @@ app.get('/weather', function(req,res){
 app.get('*', function(req, res){
 	res.send({
 		error: "Ruta no valida"
+	})
+})
+
+
+app.get('bbcita', function(req, res){
+	res.send({
+		error: "Tu hombre te ama pero tu le eres infiel"
 	})
 })
 
